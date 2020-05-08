@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,7 +38,7 @@ public class LibrarianController {
 			branches = librarianService.getBranches();
 		} catch (final SQLException e) {
             e.printStackTrace();
-            return new ResponseEntity<List<LibraryBranch>>(branches , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<LibraryBranch>>(branches , HttpStatus.INTERNAL_SERVER_ERROR);
 		}
         return new ResponseEntity<List<LibraryBranch>>(branches , HttpStatus.OK);
      }
@@ -56,7 +57,7 @@ public class LibrarianController {
             books = librarianService.getBooksWithSearch(search);
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ResponseEntity<List<Book>>(books , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<Book>>(books , HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
         return new ResponseEntity<List<Book>>(books , HttpStatus.OK);
@@ -91,7 +92,7 @@ public class LibrarianController {
             books = librarianService.getBooksAtABranch(branchId);
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ResponseEntity<List<Book>>(books, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<Book>>(books, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
         return new ResponseEntity<List<Book>>(books, HttpStatus.OK);
@@ -104,23 +105,31 @@ public class LibrarianController {
     // }
 
     @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
-    public void updateCopies(@PathVariable int branchId,
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> updateCopies(@PathVariable int branchId,
                              @PathVariable int bookId,
                              @RequestBody BookCopies bookCopies){
         try {
             librarianService.updateCopies(bookCopies);
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ResponseEntity<String>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<String>("success", HttpStatus.ACCEPTED);
     }
 
     @PutMapping(value = "/lms/librarian/branches/{branchId}/update")
-    public void updateBranch(@PathVariable int branchId,
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> updateBranch(@PathVariable int branchId,
                              @RequestBody LibraryBranch libraryBranch){
         try {
             librarianService.updateBranch(libraryBranch);
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ResponseEntity<String>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+        return new ResponseEntity<String>("success", HttpStatus.ACCEPTED);
+
     }
 }
