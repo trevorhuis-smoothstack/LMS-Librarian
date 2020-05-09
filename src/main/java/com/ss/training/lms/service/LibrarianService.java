@@ -157,12 +157,12 @@ public class LibrarianService {
      * @return
      * @throws SQLException
      */
-    public List<Book> getBooksAtABranch(LibraryBranch branch) throws SQLException {
+    public List<Book> getBooksAtABranch(int branch) throws SQLException {
         Connection conn = null;
         try {
             conn = connUtil.getConnection();
             List<Book> books = new ArrayList<>();
-            List<BookCopies> entries = entriesDAO.readBooksFromABranch(branch.getBranchId(), conn);
+            List<BookCopies> entries = entriesDAO.readBooksFromABranch(branch, conn);
             if(entries.size() == 0) {
                 return null;
             }
