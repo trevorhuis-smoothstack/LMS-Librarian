@@ -1,7 +1,4 @@
 package com.ss.training.lms.controller;
-
-import static org.mockito.ArgumentMatchers.isNull;
-
 import java.sql.SQLException;
 import java.util.List;
 
