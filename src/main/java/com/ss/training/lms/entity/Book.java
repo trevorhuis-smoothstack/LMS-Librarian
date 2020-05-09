@@ -2,13 +2,8 @@ package com.ss.training.lms.entity;
 
 import java.io.Serializable;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Book implements Serializable{
-    /**
-     *
-     */
+
     private static final long serialVersionUID = -3859753496101899553L;
     private int bookId;
     private String title;
