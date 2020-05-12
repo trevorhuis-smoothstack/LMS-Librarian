@@ -14,12 +14,9 @@ import com.ss.training.lms.dao.LibraryBranchDAO;
 import com.ss.training.lms.entity.Book;
 import com.ss.training.lms.entity.BookCopies;
 import com.ss.training.lms.entity.LibraryBranch;
-import com.ss.training.lms.jdbc.ConnectionUtil;
 
 @Component
 public class LibrarianService {
-	@Autowired
-    public ConnectionUtil connUtil;
 	
 	@Autowired
 	LibraryBranchDAO libDAO;
@@ -39,7 +36,6 @@ public class LibrarianService {
     public boolean updateCopies(BookCopies entry) throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             List<BookCopies> entries = entriesDAO.readAnEntry(entry.getBranchId(), entry.getBookId(), conn);
             if (entries.size() == 0) {
                 entriesDAO.addBookCopiesEntry(entry, conn);
@@ -69,7 +65,6 @@ public class LibrarianService {
     public boolean updateBranch(LibraryBranch branch) throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             libDAO.updateBranch(branch, conn);
             conn.commit();
             return true;
@@ -92,7 +87,6 @@ public class LibrarianService {
     public List<LibraryBranch> getBranches() throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             return libDAO.readAllBranches(conn);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -113,7 +107,6 @@ public class LibrarianService {
     public List<Book> getBooksWithSearch(String search) throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             return bookDAO.readAllBooksWithSearch(search, conn);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -135,7 +128,6 @@ public class LibrarianService {
     public BookCopies getAnEntryOfBookCopies(Integer branchId, Integer bookId) throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             List<BookCopies> entries = entriesDAO.readAnEntry(branchId, bookId, conn);
             if(entries.size() == 0) {
                 return null;
@@ -160,7 +152,6 @@ public class LibrarianService {
     public List<Book> getBooksAtABranch(int branch) throws SQLException {
         Connection conn = null;
         try {
-            conn = connUtil.getConnection();
             List<Book> books = new ArrayList<>();
             List<BookCopies> entries = entriesDAO.readBooksFromABranch(branch, conn);
             if(entries.size() == 0) {
