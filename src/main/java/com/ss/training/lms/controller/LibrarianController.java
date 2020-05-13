@@ -77,8 +77,8 @@ public class LibrarianController {
                 status = HttpStatus.NOT_FOUND;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<BookCopies>(bookCopies , HttpStatus.BAD_REQUEST);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<BookCopies>(bookCopies , status);
         }
         return new ResponseEntity<BookCopies>(bookCopies , status);
 
@@ -111,7 +111,7 @@ public class LibrarianController {
                                                @RequestBody BookCopies bookCopies)
         {
         HttpStatus status = HttpStatus.OK;
-        if (bookCopies == null)
+        if (bookCopies == null || bookCopies.getBookId() == null || bookCopies.getBranchId() == null)
         {
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<BookCopies>(bookCopies, status);
