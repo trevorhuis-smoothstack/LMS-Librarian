@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LibraryBranchDAO extends JpaRepository<LibraryBranch, Long> {
-	
 }
 
