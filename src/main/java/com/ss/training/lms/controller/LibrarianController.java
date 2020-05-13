@@ -25,11 +25,7 @@ public class LibrarianController {
     @Autowired
     LibrarianService librarianService;
 
-    @GetMapping(path="/lms/librarian/branches",
-                produces = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE
-                })
+    @GetMapping(path="/lms/librarian/branches")
     public ResponseEntity<List<LibraryBranch>> getBranches()
      {
         HttpStatus status = HttpStatus.OK;
@@ -47,11 +43,7 @@ public class LibrarianController {
      }
 
 
-    @RequestMapping(path="/lms/librarian/books/{search}",
-                    produces = {
-                        MediaType.APPLICATION_JSON_VALUE,
-                        MediaType.APPLICATION_XML_VALUE
-                    })
+    @RequestMapping(path="/lms/librarian/books/{search}")
     public ResponseEntity<List<Book>> getBooksWithSearch(@PathVariable String search)
     {
         List<Book> books = null;;
@@ -72,11 +64,7 @@ public class LibrarianController {
 
     }
 
-    @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies",
-                    produces = {
-                        MediaType.APPLICATION_JSON_VALUE,
-                        MediaType.APPLICATION_XML_VALUE
-                    })
+    @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies")
     public ResponseEntity<BookCopies> getAnEntryOfBookCopies(@PathVariable int branch, @PathVariable int book)
     {
         BookCopies bookCopies = null;
@@ -96,11 +84,7 @@ public class LibrarianController {
 
     }
 
-    @GetMapping(path="lms/librarian/branches/{branchId}/books",
-            produces = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE
-                })
+    @GetMapping(path="lms/librarian/branches/{branchId}/books")
     public ResponseEntity<List<Book>>getBooksAtABranch(@PathVariable int branchId)
     {
         List<Book> books = null;
@@ -121,11 +105,7 @@ public class LibrarianController {
 
     }
 
-    @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}",
-            produces = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE
-                })
+    @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
     public ResponseEntity<BookCopies> updateCopies(@PathVariable int branchId,
                                                @PathVariable int bookId,
                                                @RequestBody BookCopies bookCopies)
@@ -152,11 +132,7 @@ public class LibrarianController {
         return new ResponseEntity<BookCopies>(bookCopies, status);
     }
 
-    @PutMapping(value = "/lms/librarian/branches/{branchId}",
-            produces = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE
-                })
+    @PutMapping(value = "/lms/librarian/branches/{branchId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<LibraryBranch> updateBranch(@PathVariable int branchId,
                              @RequestBody LibraryBranch libraryBranch){
