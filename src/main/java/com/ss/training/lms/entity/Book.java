@@ -2,11 +2,28 @@ package com.ss.training.lms.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tbl_book")
 public class Book implements Serializable{
 
     private static final long serialVersionUID = -3859753496101899553L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="bookId")
     private int bookId;
+
+    @Column(name="title")
     private String title;
+
+    @Column(name="pubId")
     private int publisherId;
 
     @Override
