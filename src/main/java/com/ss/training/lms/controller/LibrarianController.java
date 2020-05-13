@@ -18,91 +18,88 @@ public class LibrarianController {
     @Autowired
     LibrarianService librarianService;
 
-    /** 
-     * Hey Sean, I see you added these functions and I missed this during the code review. These are not any API functionality we need.
-     * I was using them to make the terminal application more user friendly. I will leave it in for you to decide what happens.
-     * The only two stated functions of the Librarian is update the number of copies for a book and update details of a branch. - Trevor
-    */
+    @GetMapping(path="/lms/librarian/branches")
+    public ResponseEntity<List<LibraryBranch>> getBranches()
+     {
+        HttpStatus status = HttpStatus.OK;
+        List<LibraryBranch> branches = null;
+        try {
+            branches = librarianService.getBranches();
+            if (branches == null){
+                status = HttpStatus.NOT_FOUND;
+            }
+		} catch (final SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<List<LibraryBranch>>(branches , HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+        return new ResponseEntity<List<LibraryBranch>>(branches , status);
+     }
 
-    // @GetMapping(path="/lms/librarian/branches",
-    //             produces = {
-    //                 MediaType.APPLICATION_XML_VALUE,
-    //                 MediaType.APPLICATION_JSON_VALUE
-    //             })
-    // public ResponseEntity<List<LibraryBranch>> getBranches()
-    //  {
-    //     HttpStatus status = HttpStatus.OK;
-    //     List<LibraryBranch> branches = librarianService.getBranches();
-    //     if (branches == null){
-    //         status = HttpStatus.NOT_FOUND;
-    //     }
-    //     return new ResponseEntity<List<LibraryBranch>>(branches , status);
-    // }
 
-    // @RequestMapping(path="/lms/librarian/books/{search}",
-    //                 produces = {
-    //                     MediaType.APPLICATION_XML_VALUE,
-    //                     MediaType.APPLICATION_JSON_VALUE
-    //                 })
-    // public ResponseEntity<List<Book>> getBooksWithSearch(@PathVariable String search)
-    // {
-    //     List<Book> books = null;;
-    //     HttpStatus status = HttpStatus.OK;
+    @RequestMapping(path="/lms/librarian/books/{search}")
+    public ResponseEntity<List<Book>> getBooksWithSearch(@PathVariable String search)
+    {
+        List<Book> books = null;;
+        HttpStatus status = HttpStatus.OK;
 
-    //     try {
-    //         books = librarianService.getBooksWithSearch(search);
-    //         if (books == null)
-    //         {
-    //             status = HttpStatus.NOT_FOUND;
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return new ResponseEntity<List<Book>>(books , HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            books = librarianService.getBooksWithSearch(search);
+            if (books == null)
+            {
+                status = HttpStatus.NOT_FOUND;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<List<Book>>(books , HttpStatus.INTERNAL_SERVER_ERROR);
 
-    //     }
-    //     return new ResponseEntity<List<Book>>(books , status);
-    // }
+        }
+        return new ResponseEntity<List<Book>>(books , status);
 
-    // @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies",
-    //                 produces = {
-    //                     MediaType.APPLICATION_XML_VALUE,
-    //                     MediaType.APPLICATION_JSON_VALUE
-    //                 })
-    // public ResponseEntity<BookCopies> getAnEntryOfBookCopies(@PathVariable int branch, @PathVariable int book)
-    // {
-    //     HttpStatus status = HttpStatus.OK;
-    //     BookCopies bookCopies = librarianService.getAnEntryOfBookCopies(branch, book);
-    //     if (bookCopies == null)
-    //     {
-    //         status = HttpStatus.NOT_FOUND;
-    //     }
-    //     return new ResponseEntity<BookCopies>(bookCopies , status);
+    }
 
-    // }
+    @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies")
+    public ResponseEntity<BookCopies> getAnEntryOfBookCopies(@PathVariable int branch, @PathVariable int book)
+    {
+        BookCopies bookCopies = null;
+        HttpStatus status = HttpStatus.OK;
 
-    // @GetMapping(path="lms/librarian/branches/{branchId}/books")
-    // public ResponseEntity<List<Book>>getBooksAtABranch(@PathVariable int branchId)
-    // {
-    //     List<Book> books = null;
-    //     HttpStatus status = HttpStatus.OK;
+        try {
+            bookCopies = librarianService.getAnEntryOfBookCopies(branch, book);
+            if (bookCopies == null)
+            {
+                status = HttpStatus.NOT_FOUND;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<BookCopies>(bookCopies , HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<BookCopies>(bookCopies , status);
 
-    //     try {
-    //         books = librarianService.getBooksAtABranch(branchId);
-    //         if (books == null)
-    //         {
-    //             status = HttpStatus.NOT_FOUND;
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return new ResponseEntity<List<Book>>(books, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-    //     }
-    //     return new ResponseEntity<List<Book>>(books, status);
+    @GetMapping(path="lms/librarian/branches/{branchId}/books")
+    public ResponseEntity<List<Book>>getBooksAtABranch(@PathVariable int branchId)
+    {
+        List<Book> books = null;
+        HttpStatus status = HttpStatus.OK;
 
-    // }
+        try {
+            books = librarianService.getBooksAtABranch(branchId);
+            if (books == null)
+            {
+                status = HttpStatus.NOT_FOUND;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<List<Book>>(books, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<List<Book>>(books, status);
+
+    }
 
     @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
-    public ResponseEntity<String> updateCopies(@PathVariable int branchId,
+    public ResponseEntity<BookCopies> updateCopies(@PathVariable int branchId,
                                                @PathVariable int bookId,
                                                @RequestBody BookCopies bookCopies)
         {
@@ -110,24 +107,25 @@ public class LibrarianController {
         if (bookCopies == null)
         {
             status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<String>("Problem with request", status);
+            return new ResponseEntity<BookCopies>(bookCopies, status);
         }
         librarianService.updateCopies(bookCopies);
         return new ResponseEntity<String>("success", status);
     }
 
-    @PutMapping(value = "/lms/librarian/branches/{branchId}/update")
+    @PutMapping(value = "/lms/librarian/branches")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> updateBranch(@PathVariable int branchId,
+    public ResponseEntity<LibraryBranch> updateBranch(@PathVariable int branchId,
                              @RequestBody LibraryBranch libraryBranch){
         HttpStatus status = HttpStatus.OK;
         if (libraryBranch == null)
         {
             status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<String>("Problem with request", status);
+            return new ResponseEntity<LibraryBranch>(libraryBranch, status);
         }
         librarianService.updateBranch(libraryBranch);
         return new ResponseEntity<String>("success", status);
+
 
     }
 }
