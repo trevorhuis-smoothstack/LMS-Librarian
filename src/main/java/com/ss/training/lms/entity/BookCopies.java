@@ -2,13 +2,29 @@ package com.ss.training.lms.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tbl_book_copies")
+@IdClass(BookCopiesId.class)
 public class BookCopies implements Serializable{
     /**
      *
      */
     private static final long serialVersionUID = -5411320537300713589L;
+    @Id
+    @Column(name="bookId")
     private Integer bookId;
+
+    @Id
+    @Column(name="branchId")
     private Integer branchId;
+
+    @Column(name="noOfCopies")
     private Integer noOfCopies;
 
     public BookCopies(Integer bookId, Integer branchId, Integer noOfCopies) {
