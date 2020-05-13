@@ -25,11 +25,7 @@ public class LibrarianController {
     @Autowired
     LibrarianService librarianService;
 
-    @GetMapping(path="/lms/librarian/branches",
-                produces = {
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
-                })
+    @GetMapping(path="/lms/librarian/branches")
     public ResponseEntity<List<LibraryBranch>> getBranches()
      {
         HttpStatus status = HttpStatus.OK;
@@ -47,11 +43,7 @@ public class LibrarianController {
      }
 
 
-    @RequestMapping(path="/lms/librarian/books/{search}",
-                    produces = {
-                        MediaType.APPLICATION_XML_VALUE,
-                        MediaType.APPLICATION_JSON_VALUE
-                    })
+    @RequestMapping(path="/lms/librarian/books/{search}")
     public ResponseEntity<List<Book>> getBooksWithSearch(@PathVariable String search)
     {
         List<Book> books = null;;
@@ -72,11 +64,7 @@ public class LibrarianController {
 
     }
 
-    @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies",
-                    produces = {
-                        MediaType.APPLICATION_XML_VALUE,
-                        MediaType.APPLICATION_JSON_VALUE
-                    })
+    @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies")
     public ResponseEntity<BookCopies> getAnEntryOfBookCopies(@PathVariable int branch, @PathVariable int book)
     {
         BookCopies bookCopies = null;
@@ -118,7 +106,7 @@ public class LibrarianController {
     }
 
     @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
-    public ResponseEntity<String> updateCopies(@PathVariable int branchId,
+    public ResponseEntity<BookCopies> updateCopies(@PathVariable int branchId,
                                                @PathVariable int bookId,
                                                @RequestBody BookCopies bookCopies)
         {
@@ -126,38 +114,50 @@ public class LibrarianController {
         if (bookCopies == null)
         {
             status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<String>("Problem with request", status);
+            return new ResponseEntity<BookCopies>(bookCopies, status);
         }
 
         try {
-            librarianService.updateCopies(bookCopies);
+            boolean updated = librarianService.updateCopies(bookCopies);
+            if (updated == false)
+            {
+            	status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<BookCopies>(bookCopies, status);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ResponseEntity<String>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<BookCopies>(bookCopies, status);
         }
-        return new ResponseEntity<String>("success", status);
+        return new ResponseEntity<BookCopies>(bookCopies, status);
     }
 
-    @PutMapping(value = "/lms/librarian/branches/{branchId}/update")
+    @PutMapping(value = "/lms/librarian/branches/{branchId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> updateBranch(@PathVariable int branchId,
+    public ResponseEntity<LibraryBranch> updateBranch(@PathVariable int branchId,
                              @RequestBody LibraryBranch libraryBranch){
         HttpStatus status = HttpStatus.OK;
 
         if (libraryBranch == null)
         {
             status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<String>("Problem with request", status);
+            return new ResponseEntity<LibraryBranch>(libraryBranch, status);
         }
         try {
-            librarianService.updateBranch(libraryBranch);
+            boolean updated = librarianService.updateBranch(libraryBranch);
+            
+            if (updated == false)
+            {
+            	status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<LibraryBranch>(libraryBranch, status);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            return new ResponseEntity<String>("failed", status);
+            return new ResponseEntity<LibraryBranch>(libraryBranch, status);
 
         }
-        return new ResponseEntity<String>("success", status);
+        return new ResponseEntity<LibraryBranch>(libraryBranch, status);
 
     }
 }
