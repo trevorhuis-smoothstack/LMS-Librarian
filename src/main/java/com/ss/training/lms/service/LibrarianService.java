@@ -26,19 +26,29 @@ public class LibrarianService {
 	BookDAO bookDAO;
 
 	/**
-	 * 
-	 * @param entry
-	 */
-    public void updateCopies(BookCopies entry) {
+     * 
+     * @param entry
+     * @return
+     */ 
+    public boolean updateCopies(BookCopies entry) {
+        BookCopies entryToUpdate = entriesDAO.findByBranchIdAndBookId(entry.getBranchId(), entry.getBookId());
+        if(entryToUpdate == null)
+            return false;
         entriesDAO.save(entry);
+        return true;
     }
 
     /**
      * 
      * @param branch
+     * @return
      */
-    public void updateBranch(LibraryBranch branch) {
+    public boolean updateBranch(LibraryBranch branch) {
+        LibraryBranch branchToUpdate = libDAO.findByBranchId(branch.getBranchId());
+        if(branchToUpdate == null)
+            return false;
         libDAO.save(branch);
+        return true;
     }
 
     /**

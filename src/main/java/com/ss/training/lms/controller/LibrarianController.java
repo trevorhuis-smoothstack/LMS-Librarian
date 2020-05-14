@@ -102,20 +102,26 @@ public class LibrarianController {
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<BookCopies>(bookCopies, status);
         }
-        librarianService.updateCopies(bookCopies);
+        
+        boolean didUpdate = librarianService.updateCopies(bookCopies);
+        if(!didUpdate)
+            return new ResponseEntity<BookCopies>(bookCopies, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<BookCopies>(bookCopies, status);
     }
 
-    @PutMapping(value = "/lms/librarian/branches")
+    @PutMapping(value = "/lms/librarian/branches/{branchId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<LibraryBranch> updateBranch(@RequestBody LibraryBranch libraryBranch){
+    public ResponseEntity<LibraryBranch> updateBranch(@PathVariable int branchId,
+                             @RequestBody LibraryBranch libraryBranch){
         HttpStatus status = HttpStatus.OK;
         if (libraryBranch == null)
         {
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<LibraryBranch>(libraryBranch, status);
         }
-        librarianService.updateBranch(libraryBranch);
+        boolean didUpdate = librarianService.updateBranch(libraryBranch);
+        if(!didUpdate)
+            return new ResponseEntity<LibraryBranch>(libraryBranch, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<LibraryBranch>(libraryBranch, status);
 
 
