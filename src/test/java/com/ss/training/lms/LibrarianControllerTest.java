@@ -54,6 +54,7 @@ public class LibrarianControllerTest {
 		List<LibraryBranch> branches = new ArrayList<LibraryBranch>();
 		branches.add(new LibraryBranch(1, "name", "address"));
 		
+		// create json to test the response from the controller.
 		JSONArray array = new JSONArray();
 		JSONObject item = new JSONObject();
 		item.put("branchName", "name");
@@ -61,12 +62,15 @@ public class LibrarianControllerTest {
 		item.put("branchAddress", "address");
 		array.add(item);
 		
+		// Tell librarian service to return the branches I created earlier when called.
 		Mockito.when(librarianService.getBranches()).thenReturn(branches);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches"))
+		// make a request to the controller through the mock and check the results
+		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches").accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().json(array.toString()));
 		
+		// Tell librarian service to return null when get branches is called.
 		Mockito.when(librarianService.getBranches()).thenReturn(null);
 		
 		// test the return when the database is empty
@@ -98,7 +102,7 @@ public class LibrarianControllerTest {
 		array.add(item2);
 		
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/books/title"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/books/title").accept(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.content().json(array.toString()));
 		
@@ -119,7 +123,7 @@ public class LibrarianControllerTest {
 		item.put("branchId", 2);
 		item.put("noOfCopies", 3);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches/2/books/1/copies"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches/2/books/1/copies").accept(MediaType.APPLICATION_JSON))
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json(item.toString()));
 		
@@ -144,7 +148,7 @@ public class LibrarianControllerTest {
 		item.put("publisherId", 1);
 		books.add(item);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches/1/books"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches/1/books").accept(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.content().json(books.toString()));
 		
@@ -165,15 +169,16 @@ public class LibrarianControllerTest {
 		item.put("branchId", 1);
 		item.put("noOfCopies", 1);
 		   
-        mockMvc.perform(MockMvcRequestBuilders.put("/lms/librarian/branches/1/books/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/lms/librarian/branches/1/copies")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(item.toString()))
+                .content(item.toString())
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(item.toString()));
         
 		Mockito.when(librarianService.updateCopies(bookCopies)).thenReturn(false);
 		   
-        mockMvc.perform(MockMvcRequestBuilders.put("/lms/librarian/branches/1/books/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/lms/librarian/branches/1/copies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(item.toString()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -193,7 +198,8 @@ public class LibrarianControllerTest {
 
 	    mockMvc.perform(MockMvcRequestBuilders.put("/lms/librarian/branches/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(item.toString()))
+                .content(item.toString())
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(item.toString()));
 	    
