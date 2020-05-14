@@ -39,26 +39,6 @@ public class LibrarianController {
      }
 
 
-    // @RequestMapping(path="/lms/librarian/books/{search}")
-    // public ResponseEntity<List<Book>> getBooksWithSearch(@PathVariable String search)
-    // {
-    //     List<Book> books = null;;
-    //     HttpStatus status = HttpStatus.OK;
-
-    //     try {
-    //         books = librarianService.getBooksWithSearch(search);
-    //         if (books == null)
-    //         {
-    //             status = HttpStatus.NOT_FOUND;
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return new ResponseEntity<List<Book>>(books , HttpStatus.INTERNAL_SERVER_ERROR);
-
-    //     }
-    //     return new ResponseEntity<List<Book>>(books , status);
-
-    // }
 
     @RequestMapping(path="lms/librarian/branches/{branch}/books/{book}/copies")
     public ResponseEntity<BookCopies> getAnEntryOfBookCopies(@PathVariable int branch, @PathVariable int book)

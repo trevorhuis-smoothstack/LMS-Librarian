@@ -76,39 +76,6 @@ public class LibrarianControllerTest {
 		
 	}
 	
-	// @Test
-	// public void testGetBooksWithSearch() throws Exception
-	// {
-	// 	List<Book> books = new ArrayList<Book>();
-	// 	books.add(new Book(1,"title1", 1));
-	// 	books.add(new Book(2,"title2", 2));
-		
-	// 	Mockito.when(librarianService.getBooksWithSearch("title")).thenReturn(books);
-		
-	// 	JSONArray array = new JSONArray();
-	// 	JSONObject item = new JSONObject();
-	// 	item.put("bookId", 1);
-	// 	item.put("title", "title1");
-	// 	item.put("publisherId", 1);
-	// 	array.add(item);
-		
-	// 	JSONObject item2 = new JSONObject();
-	// 	item2.put("bookId", 2);
-	// 	item2.put("title", "title2");
-	// 	item2.put("publisherId", 2);
-	// 	array.add(item2);
-		
-		
-	// 	mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/books/title").accept(MediaType.APPLICATION_JSON))
-	// 	.andExpect(MockMvcResultMatchers.status().isOk())
-	// 	.andExpect(MockMvcResultMatchers.content().json(array.toString()));
-		
-	// 	// test empty return
-	// 	Mockito.when(librarianService.getBooksWithSearch("title")).thenReturn(null);
-	// 	mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/books/title"))
-	// 	.andExpect(MockMvcResultMatchers.status().isNotFound());
-	// }
-	
 	@Test
 	public void testGetAnEntryOfBookCopies() throws Exception
 	{
