@@ -71,7 +71,6 @@ public class LibrarianController {
             {
                 status = HttpStatus.NOT_FOUND;
             }
-
         return new ResponseEntity<BookCopies>(bookCopies , status);
 
     }
@@ -92,11 +91,13 @@ public class LibrarianController {
 
     }
 
-    @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
-    public ResponseEntity<BookCopies> updateCopies(@RequestBody BookCopies bookCopies)
+
+    @PutMapping(value = "/lms/librarian/branches/{branch}/copies")
+    public ResponseEntity<BookCopies> updateCopies(@PathVariable int branch,
+                                               @RequestBody BookCopies bookCopies)
         {
         HttpStatus status = HttpStatus.OK;
-        if (bookCopies == null)
+        if (bookCopies == null || bookCopies.getBookId() == null || bookCopies.getBranchId() == null)
         {
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<BookCopies>(bookCopies, status);
