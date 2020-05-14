@@ -93,9 +93,7 @@ public class LibrarianController {
     }
 
     @PutMapping(value = "/lms/librarian/branches/{branchId}/books/{bookId}")
-    public ResponseEntity<BookCopies> updateCopies(@PathVariable int branchId,
-                                               @PathVariable int bookId,
-                                               @RequestBody BookCopies bookCopies)
+    public ResponseEntity<BookCopies> updateCopies(@RequestBody BookCopies bookCopies)
         {
         HttpStatus status = HttpStatus.OK;
         if (bookCopies == null)
@@ -109,8 +107,7 @@ public class LibrarianController {
 
     @PutMapping(value = "/lms/librarian/branches")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<LibraryBranch> updateBranch(@PathVariable int branchId,
-                             @RequestBody LibraryBranch libraryBranch){
+    public ResponseEntity<LibraryBranch> updateBranch(@RequestBody LibraryBranch libraryBranch){
         HttpStatus status = HttpStatus.OK;
         if (libraryBranch == null)
         {
